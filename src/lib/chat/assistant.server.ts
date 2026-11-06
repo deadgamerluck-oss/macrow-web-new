@@ -230,7 +230,7 @@ export async function handleChat(request: Request): Promise<Response> {
 
   const model = geminiKey
     ? createGoogleGenerativeAI({ apiKey: geminiKey })(
-        process.env["GEMINI_MODEL"] || "gemini-2.5-flash"
+        process.env["GEMINI_MODEL"] || "gemini-3.5-flash"
       )
     : createOpenAI({ apiKey: openaiKey! }).responses(
         process.env["OPENAI_MODEL"] || "gpt-4.1-mini"
