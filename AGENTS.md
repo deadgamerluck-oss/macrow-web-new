@@ -1,0 +1,18 @@
+- Preserve the TanStack Start route structure and existing CMS; imported backend identities and data require explicit exports rather than the source environment.
+- Manage popup campaigns through authenticated server functions and database admin-role policies; never auto-grant admin access from an email domain.
+- Keep visitor popup, cookie and motion behavior in the shared visitor experience, with one popup per session and reduced-motion support.
+- Browser storage is only for consent, theme, popup frequency and the visitor's random chat conversation id; campaign content, chat transcripts and enquiries persist in Cloud tables.
+- Keep supplied binary media in CDN asset pointers and generated editorial imagery as bundled imports; never fabricate team portraits.
+- Published blog detail routes load database content through a public read-only server function and Query; admin edits use RLS and database validation so new posts need no routes or code.
+- Newsletter signups use a validated, rate-limited server function with private subscriber storage; marketing sends require a dedicated provider, never the app-email sender.
+- Admin-uploaded images go to the private `site-images` bucket and are stored as `storage:<path>` in existing image columns; render them with the `SiteImage` component from `src/lib/site-images.tsx` (signs URLs on read) — public buckets are blocked by workspace policy.
+- Case studies are `work_projects` rows with `slug` + `body`; `/work/$slug` renders them, so new projects get a detail page with no route changes.
+- Long-form admin content (blog body, case-study body) uses safe marker text — `##`, `**bold**`, `*italic*`, `==highlight==`, `[label](url)`, `![alt](src)`, `- ` lists — edited with `RichTextEditor` (src/components/rich-editor.tsx) and rendered with `RichText` (src/lib/rich-text.tsx); never store or render raw HTML.
+- `SiteImage` only renders https links and `storage:` paths directly; any other value (e.g. legacy cover keys) must resolve through its `fallback` prop or the image is hidden.
+- Public content indexes and case studies use public read-only server functions with existing RLS, while admin queries remain separate, so crawlers receive published content without exposing drafts.
+- Maintain the existing sitemap handler with paginated public CMS queries; static pages omit lastmod and articles use their authoritative update timestamp, so discovery stays accurate as content grows.
+- Keep page-specific article and breadcrumb metadata in leaf head handlers through the shared search helper, so each URL has one authoritative structured-data representation.
+- Gate decorative hero video behind device, connection and motion preferences and pause it offscreen, so mobile visitors avoid unnecessary video transfer.
+- The website AI assistant streams through the `/api/chat` server route (handler in `src/lib/chat/assistant.server.ts`); the server loads stored history and accepts only the newest visitor message, so transcripts and lead tool results can't be forged from the browser.
+- Assistant leads are saved by the server-side `save_lead` tool into `contact_submissions` (source "AI chat assistant"), so they reuse the Enquiries sheet and export; on/off, name and greeting live in the single-row `chatbot_settings` table managed from the admin panel.
+- The chat panel is lazy-loaded on first open and the AI Elements markdown renderer runs without diagram/math/code plugins, keeping public pages fast.

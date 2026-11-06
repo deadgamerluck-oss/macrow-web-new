@@ -1,0 +1,18 @@
+CREATE TABLE public.newsletter_subscribers (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), email text NOT NULL UNIQUE, consent_at timestamptz NOT NULL DEFAULT now(), created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT, DELETE ON public.newsletter_subscribers TO authenticated;
+GRANT ALL ON public.newsletter_subscribers TO service_role;
+ALTER TABLE public.newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY admin_newsletter ON public.newsletter_subscribers FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
+CREATE POLICY delete_newsletter ON public.newsletter_subscribers FOR DELETE TO authenticated USING (public.has_role(auth.uid(), 'admin'));
+CREATE TABLE public.form_rate_limits (key text PRIMARY KEY, window_start timestamptz NOT NULL DEFAULT now(), attempts integer NOT NULL DEFAULT 1);
+GRANT ALL ON public.form_rate_limits TO service_role;
+ALTER TABLE public.form_rate_limits ENABLE ROW LEVEL SECURITY;
+CREATE FUNCTION public.consume_form_limit(limit_key text) RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$ DECLARE n integer; BEGIN INSERT INTO public.form_rate_limits AS limits(key) VALUES(limit_key) ON CONFLICT(key) DO UPDATE SET attempts=CASE WHEN limits.window_start < now()-interval '1 hour' THEN 1 ELSE limits.attempts+1 END, window_start=CASE WHEN limits.window_start < now()-interval '1 hour' THEN now() ELSE limits.window_start END RETURNING attempts INTO n; RETURN n <= 10; END $$;
+REVOKE ALL ON FUNCTION public.consume_form_limit(text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.consume_form_limit(text) TO service_role;
+CREATE FUNCTION public.validate_website_submission() RETURNS trigger LANGUAGE plpgsql SET search_path = public AS $$ BEGIN IF NEW.email !~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$' OR length(NEW.email)>255 THEN RAISE EXCEPTION 'Invalid email address'; END IF; IF TG_TABLE_NAME='contact_submissions' THEN IF length(trim(NEW.name)) NOT BETWEEN 1 AND 100 OR length(trim(NEW.message)) NOT BETWEEN 1 AND 1500 OR length(coalesce(NEW.phone,''))>20 OR length(coalesce(NEW.budget,''))>100 THEN RAISE EXCEPTION 'Invalid enquiry'; END IF; ELSIF TG_TABLE_NAME='job_applications' THEN IF length(trim(NEW.full_name)) NOT BETWEEN 1 AND 100 OR length(coalesce(NEW.message,''))>1500 OR length(coalesce(NEW.phone,''))>20 OR length(NEW.role_title)>200 OR (NEW.resume_path IS NOT NULL AND NEW.resume_path !~ '^[a-f0-9-]+\.(pdf|doc|docx)$') THEN RAISE EXCEPTION 'Invalid application'; END IF; END IF; RETURN NEW; END $$;
+CREATE TRIGGER contact_validate BEFORE INSERT ON public.contact_submissions FOR EACH ROW EXECUTE FUNCTION public.validate_website_submission();
+CREATE TRIGGER application_validate BEFORE INSERT ON public.job_applications FOR EACH ROW EXECUTE FUNCTION public.validate_website_submission();
+CREATE TRIGGER newsletter_validate BEFORE INSERT ON public.newsletter_subscribers FOR EACH ROW EXECUTE FUNCTION public.validate_website_submission();
+CREATE FUNCTION public.validate_blog_content() RETURNS trigger LANGUAGE plpgsql SET search_path = public AS $$ BEGIN IF NEW.slug !~ '^[a-z0-9]+(-[a-z0-9]+)*$' OR length(NEW.slug)>180 OR length(trim(NEW.title)) NOT BETWEEN 1 AND 180 OR length(trim(NEW.category)) NOT BETWEEN 1 AND 100 OR length(trim(NEW.summary)) NOT BETWEEN 1 AND 2000 OR length(coalesce(NEW.body,''))>100000 THEN RAISE EXCEPTION 'Invalid blog content'; END IF; RETURN NEW; END $$;
+CREATE TRIGGER blog_validate BEFORE INSERT OR UPDATE ON public.blog_posts FOR EACH ROW EXECUTE FUNCTION public.validate_blog_content();

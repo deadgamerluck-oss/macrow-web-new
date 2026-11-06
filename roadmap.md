@@ -1,0 +1,30 @@
+# Advertising360 website improvements
+- [x] Add homepage/About hover effects, testimonial motion and smooth FAQ transitions.
+- [x] Fix message-field sizing and verify contact/career saved submissions.
+- [x] Add database-driven individual blog pages and newsletter signup storage/admin access.
+- [ ] Replace hero/work media and footer phone: waiting on supplied originals.
+- [ ] Newsletter sending: requires a dedicated marketing email service.
+- [x] Safely import the existing website and preserve pages, CMS, and forms.
+- [x] Add supporting imagery, cursor flair, and reduced-motion-friendly animations.
+- [x] Add secure admin-managed promotional and lead popups with saved leads.
+- [x] Add bottom cookie preferences and privacy/cookie policy pages.
+- [x] Apply the exact twelve-person About team order.
+- [x] Verify website and lead/admin flow.
+- [ ] Existing records, user access and resumes: waiting on owner exports.
+- [ ] Email alerts: waiting on sending configuration.
+- [ ] Privacy/cookie wording: waiting on business/legal review.
+- [x] Direct image uploads in admin (popups, insights, testimonials, logos, work) via private site-images bucket.
+- [x] Case-study detail pages at /work/<slug> with admin full-case-study field and auto-generated pages.
+- [x] Applications grouped per role with Excel (CSV) export; enquiries/partners as sheets with export.
+- [x] Phone mandatory on all forms; math anti-spam check on contact/career/partner/home forms.
+- [x] Role details popup on careers page; admin can add/edit full role details.
+- [ ] Full captcha service (e.g. Cloudflare Turnstile): needs site keys from the owner.
+- [x] Admin dashboard redesign: sidebar nav + overview with live counts and latest enquiries/applications.
+- [x] Rich editing for insights and case studies (headings, bold, highlight, links, inline image uploads).
+- [x] Fixed cover/photo rendering for legacy image keys; signed image links now last 7 days.
+- [x] Improve public-page SEO/AEO content, metadata, structured data and CMS sitemap discovery.
+- [x] Prepare researched worldwide keyword workbook and remaining search-growth actions.
+- [x] Improve loading performance and verify layouts across mobile, tablet and desktop sizes.
+- [ ] Worldwide search activation: published site is private; owner must enable public access and publish latest changes, then verify search properties and submit sitemap.
+- [ ] Search authority and field performance: require approved client evidence, author credentials, analytics configuration and public-site measurements; rankings and AI citations cannot be guaranteed.
+- [x] Website AI chat assistant (bottom-right) with saved conversations, natural lead capture into Enquiries, and admin on/off, name and greeting.

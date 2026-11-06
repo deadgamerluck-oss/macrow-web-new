@@ -1,0 +1,8 @@
+# Applied by Cloudflare Pages to static asset responses. SSR responses receive
+# these headers from src/server.ts because Pages _headers do not cover Workers.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'none'
