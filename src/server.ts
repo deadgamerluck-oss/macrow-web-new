@@ -76,9 +76,13 @@ export default {
       const response = await handler.fetch(request, env, ctx);
       return applySecurityHeaders(await normalizeCatastrophicSsrResponse(response), request);
     } catch (error) {
-      console.error(error);
+      console.error("[MACROW SERVER CATASTROPHIC ERROR]:", error);
+      const isDevOrDebug = process.env.NODE_ENV !== "production" || process.env.DEBUG === "true";
+      const errorDetail = isDevOrDebug && error instanceof Error
+        ? `<div style="max-width:800px;margin:20px auto;padding:15px;background:#fee;border:1px solid #f99;border-radius:6px;font-family:monospace;white-space:pre-wrap;text-align:left;"><strong>${error.name}: ${error.message}</strong>\n\n${error.stack}</div>`
+        : "";
       return applySecurityHeaders(
-        new Response(renderErrorPage(), {
+        new Response(renderErrorPage().replace("</body>", `${errorDetail}</body>`), {
           status: 500,
           headers: { "content-type": "text/html; charset=utf-8" },
         }),
