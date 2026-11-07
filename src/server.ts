@@ -28,11 +28,21 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   const body = await response.clone().text();
   if (!isH3SwallowedErrorBody(body)) return response;
 
-  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
-  return new Response(renderErrorPage(), {
-    status: 500,
-    headers: { "content-type": "text/html; charset=utf-8" },
-  });
+  const captured = consumeLastCapturedError();
+  console.error(captured ?? new Error(`h3 swallowed SSR error: ${body}`));
+
+  const details = captured ? `\n\n${captured instanceof Error ? captured.stack ?? captured.message : String(captured)}` : `\n\n${body}`;
+
+  return new Response(
+    renderErrorPage().replace(
+      "</body>",
+      `<div style="max-width:900px;margin:20px auto;padding:16px;background:#fef2f2;border:1px solid #f87171;color:#991b1b;border-radius:8px;font-family:monospace;white-space:pre-wrap;text-align:left;font-size:13px;overflow-x:auto;"><strong>Server Error (Diagnostics):</strong>${details}</div></body>`
+    ),
+    {
+      status: 500,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    }
+  );
 }
 
 function applySecurityHeaders(response: Response, request: Request): Response {
