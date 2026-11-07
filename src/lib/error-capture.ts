@@ -1,3 +1,46 @@
+import { Readable } from "node:stream";
+
+// Hostinger / LiteSpeed / LSNODE stdio polyfill:
+// In LiteSpeed environments, file descriptor 0 is bound to an active socket,
+// causing Node's built-in process.stdin getter to throw "Error: open EEXIST"
+// during ESM translation or standard stream access. Redefine process.stdin
+// to return a dummy Readable stream if accessing it fails.
+if (typeof process !== "undefined" && typeof Object.defineProperty === "function") {
+  try {
+    const desc = Object.getOwnPropertyDescriptor(process, "stdin");
+    if (desc && desc.get) {
+      const originalGet = desc.get;
+      let cachedStdin: unknown;
+      Object.defineProperty(process, "stdin", {
+        get() {
+          if (cachedStdin) return cachedStdin;
+          try {
+            cachedStdin = originalGet.call(process);
+            return cachedStdin;
+          } catch {
+            const dummy = new Readable({
+              read() {
+                this.push(null);
+              },
+            });
+            (dummy as Record<string, unknown>).fd = 0;
+            (dummy as Record<string, unknown>).isTTY = false;
+            (dummy as Record<string, unknown>).setRawMode = () => dummy;
+            cachedStdin = dummy;
+            return cachedStdin;
+          }
+        },
+        configurable: true,
+        enumerable: true,
+      });
+    }
+    // Eagerly probe to ensure cachedStdin is safely populated if broken
+    void process.stdin;
+  } catch {
+    // ignore
+  }
+}
+
 // Captures the original Error out-of-band so server.ts can recover the stack
 // when h3 has already swallowed the throw into a generic 500 Response.
 
