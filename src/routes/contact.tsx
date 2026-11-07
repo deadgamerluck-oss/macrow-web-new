@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AccentCard, PageHero, fieldClass } from "@/components/site";
-import { metadata } from "@/lib/site-data";
+import { CONTACT, metadata } from "@/lib/site-data";
 import { submitContactEnquiry } from "@/lib/public-submissions.functions";
 import { contactSchema } from "@/lib/content-schemas";
 import { MathCaptcha } from "@/components/captcha";

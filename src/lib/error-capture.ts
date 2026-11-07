@@ -23,9 +23,11 @@ if (typeof process !== "undefined" && typeof Object.defineProperty === "function
                 this.push(null);
               },
             });
-            (dummy as Record<string, unknown>).fd = 0;
-            (dummy as Record<string, unknown>).isTTY = false;
-            (dummy as Record<string, unknown>).setRawMode = () => dummy;
+            Object.assign(dummy, {
+              fd: 0,
+              isTTY: false,
+              setRawMode: () => dummy,
+            });
             cachedStdin = dummy;
             return cachedStdin;
           }
