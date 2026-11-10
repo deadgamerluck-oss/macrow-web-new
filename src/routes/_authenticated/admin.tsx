@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type FormEvent } from "react";
-import { Bot, Briefcase, FileText, FolderKanban, Handshake, Images, LayoutDashboard, Mail, MailPlus, Megaphone, MessageSquareQuote, Users, type LucideIcon } from "lucide-react";
+import { Bot, Briefcase, FileText, FolderKanban, Handshake, Images, LayoutDashboard, Mail, MailPlus, Megaphone, MessageSquareQuote, Users, Wrench, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fieldClass } from "@/components/site";
@@ -25,6 +25,7 @@ import { metadata } from "@/lib/site-data";
 import { CampaignManager } from "@/components/campaign-manager";
 import { NewsletterManager } from "@/components/newsletter-manager";
 import { ChatbotManager } from "@/components/chatbot-manager";
+import { MaintenanceManager } from "@/components/maintenance-manager";
 import { postSchema } from "@/lib/content-schemas";
 import { ImageUploadField } from "@/components/image-upload";
 import { RichTextEditor } from "@/components/rich-editor";
@@ -50,6 +51,7 @@ const NAV: { value: string; label: string; icon: LucideIcon }[] = [
   { value: "testimonials", label: "Testimonials", icon: MessageSquareQuote },
   { value: "work", label: "Our work", icon: FolderKanban },
   { value: "logos", label: "Client logos", icon: Images },
+  { value: "maintenance", label: "Maintenance", icon: Wrench },
 ];
 
 function Admin() {
@@ -108,6 +110,7 @@ function Admin() {
             <TabsContent value="testimonials"><ContentManager config={testimonialConfig} /></TabsContent>
             <TabsContent value="work"><ContentManager config={workConfig} /></TabsContent>
             <TabsContent value="logos"><ContentManager config={logoConfig} /></TabsContent>
+            <TabsContent value="maintenance"><MaintenanceManager /></TabsContent>
           </div>
         </Tabs>
       )}

@@ -25,10 +25,20 @@ import { submitContactEnquiry } from "@/lib/public-submissions.functions";
 import { cn } from "@/lib/utils";
 import { contactSchema } from "@/lib/content-schemas";
 
-const localClientLogoModules = import.meta.glob<string>("../assets/Clients_logo/*.png", {
-  eager: true,
-  import: "default",
-});
+const localClientLogoModules = import.meta.glob<string>(
+  "../assets/Clients_logo/*.svg",
+  {
+    eager: true,
+    import: "default",
+  },
+);
+
+function getLogoSortOrder(path: string): number {
+  const matchParen = path.match(/\((\d+)\)\.svg$/i);
+  if (matchParen) return parseInt(matchParen[1], 10);
+  if (/\.svg$/i.test(path)) return 0;
+  return 999;
+}
 
 const defaultLocalClientLogos: Array<{
   id: string;
@@ -36,16 +46,13 @@ const defaultLocalClientLogos: Array<{
   logo_url: string;
   is_published: boolean;
 }> = Object.entries(localClientLogoModules)
-  .sort(([a], [b]) => {
-    const numA = parseInt(a.match(/(\d+)\.png$/)?.[1] ?? "0", 10);
-    const numB = parseInt(b.match(/(\d+)\.png$/)?.[1] ?? "0", 10);
-    return numA - numB;
-  })
+  .sort(([a], [b]) => getLogoSortOrder(a) - getLogoSortOrder(b))
   .map(([path, url], index) => {
-    const fileName = path.split("/").pop()?.replace(".png", "") ?? `client-${index + 1}`;
+    const matchParen = path.match(/\((\d+)\)\.svg$/i);
+    const num = matchParen ? parseInt(matchParen[1], 10) : index;
     return {
-      id: `local-logo-${fileName}`,
-      name: `Client ${fileName}`,
+      id: `client-logo-${num}`,
+      name: `Client Logo ${num}`,
       logo_url: url,
       is_published: true,
     };
@@ -227,14 +234,14 @@ export function LogoSlider({ duration = 120 }: { duration?: number }) {
                   <SiteImage
                     src={l.logo_url}
                     alt={l.name}
-                    className="max-h-14 w-auto max-w-[170px] object-contain opacity-85 transition duration-300 hover:opacity-100"
+                    className="max-h-14 w-auto max-w-[170px] object-contain transition duration-300"
                   />
                 ) : (
                   <img
                     src={l.logo_url}
                     alt={l.name}
                     loading="lazy"
-                    className="max-h-14 w-auto max-w-[170px] object-contain opacity-85 transition duration-300 hover:opacity-100"
+                    className="max-h-14 w-auto max-w-[170px] object-contain transition duration-300"
                   />
                 )
               ) : (

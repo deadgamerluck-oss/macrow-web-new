@@ -46,11 +46,26 @@ function validFileSignature(ext: string, bytes: Uint8Array): boolean {
   return ext === "docx" && bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04;
 }
 
+const ALLOWED_ORIGINS = new Set([
+  "https://macrowdigital.com",
+  "https://www.macrowdigital.com",
+  "https://test.macrowdigital.com",
+]);
+
+function isAllowedOrigin(origin: string | null, requestUrl: URL): boolean {
+  if (!origin) return false;
+  if (origin === requestUrl.origin) return true;
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  // In development, allow localhost/127.0.0.1
+  if (origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:")) return true;
+  return false;
+}
+
 async function handleApplication(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const origin = request.headers.get("origin");
   const fetchSite = request.headers.get("sec-fetch-site");
-  if ((origin && origin !== url.origin) || fetchSite === "cross-site") {
+  if ((origin && !isAllowedOrigin(origin, url)) || fetchSite === "cross-site") {
     return json(403, "Request origin is not allowed.");
   }
   if (process.env["NODE_ENV"] === "production" && !origin) {

@@ -112,30 +112,32 @@ export async function handleChat(request: Request): Promise<Response> {
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: settings } = await supabaseAdmin
-    .from("chatbot_settings")
-    .select("enabled, assistant_name")
-    .eq("id", true)
-    .maybeSingle();
+  // Fetch settings, rate limits, conversation, and open roles all in parallel to minimize response latency
+  const [
+    { data: settings },
+    ipAllowed,
+    conversationAllowed,
+    { data: existing, error: loadError },
+    { data: openings },
+  ] = await Promise.all([
+    supabaseAdmin.from("chatbot_settings").select("enabled, assistant_name").eq("id", true).maybeSingle(),
+    consumeServerRateLimit("chat-ip", clientIp, 60),
+    consumeServerRateLimit("chat-conversation", body.id, 40),
+    supabaseAdmin.from("chat_conversations").select("messages, lead_id").eq("id", body.id).maybeSingle(),
+    supabaseAdmin.from("job_openings").select("title, location").eq("is_open", true).order("sort_order").limit(20),
+  ]);
+
   if (!settings?.enabled)
     return json(403, "The assistant is currently offline. Please use the contact page.");
 
-  const [ipAllowed, conversationAllowed] = await Promise.all([
-    consumeServerRateLimit("chat-ip", clientIp, 60),
-    consumeServerRateLimit("chat-conversation", body.id, 40),
-  ]);
   if (!ipAllowed || !conversationAllowed)
     return json(429, "You've sent a lot of messages. Please wait a little and try again.");
 
-  const { data: existing, error: loadError } = await supabaseAdmin
-    .from("chat_conversations")
-    .select("messages, lead_id")
-    .eq("id", body.id)
-    .maybeSingle();
   if (loadError) {
     console.error("chat load failed", loadError);
     return json(503, "The assistant is unavailable right now. Please try again shortly.");
   }
+
   if (!existing) {
     const { error } = await supabaseAdmin
       .from("chat_conversations")
@@ -145,6 +147,7 @@ export async function handleChat(request: Request): Promise<Response> {
       return json(503, "The assistant is unavailable right now. Please try again shortly.");
     }
   }
+
   const stored = (Array.isArray(existing?.messages)
     ? existing.messages
     : []) as unknown as UIMessage[];
@@ -161,13 +164,6 @@ export async function handleChat(request: Request): Promise<Response> {
   };
   const messages = stored.at(-1)?.id === userMessage.id ? stored : [...stored, userMessage];
   let leadId = existing?.lead_id ?? null;
-
-  const { data: openings } = await supabaseAdmin
-    .from("job_openings")
-    .select("title, location")
-    .eq("is_open", true)
-    .order("sort_order")
-    .limit(20);
 
   const tools = {
     save_lead: tool({

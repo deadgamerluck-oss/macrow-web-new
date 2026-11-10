@@ -354,7 +354,7 @@ function Home() {
             href="mailto:growth@macrowdigital.com"
             className="font-semibold text-primary underline underline-offset-4"
           >
-            Email growth@macrowdigital.com
+            growth@macrowdigital.com
           </a>
         </p>
       </section>

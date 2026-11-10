@@ -17,6 +17,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as CareerRouteImport } from './routes/career'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as MaintenanceRouteImport } from './routes/maintenance'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -67,6 +68,11 @@ const ContactRoute = ContactRouteImport.update({
 const CookiesRoute = CookiesRouteImport.update({
   id: '/cookies',
   path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaintenanceRoute = MaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/maintenance': typeof MaintenanceRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/maintenance': typeof MaintenanceRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/career': typeof CareerRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/maintenance': typeof MaintenanceRoute
   '/partner': typeof PartnerRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/cookies'
+    | '/maintenance'
     | '/partner'
     | '/privacy'
     | '/reset-password'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/cookies'
+    | '/maintenance'
     | '/partner'
     | '/privacy'
     | '/reset-password'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/career'
     | '/contact'
     | '/cookies'
+    | '/maintenance'
     | '/partner'
     | '/privacy'
     | '/reset-password'
@@ -271,6 +283,7 @@ export interface RootRouteChildren {
   CareerRoute: typeof CareerRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
+  MaintenanceRoute: typeof MaintenanceRoute
   PartnerRoute: typeof PartnerRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -340,6 +353,13 @@ declare module '@tanstack/react-router' {
       path: '/cookies'
       fullPath: '/cookies'
       preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maintenance': {
+      id: '/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof MaintenanceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -449,6 +469,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareerRoute: CareerRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
+  MaintenanceRoute: MaintenanceRoute,
   PartnerRoute: PartnerRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,

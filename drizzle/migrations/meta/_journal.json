@@ -64,6 +64,13 @@
       "when": 1793613625248,
       "tag": "0008_lock_public_submission_writes",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794320000000,
+      "tag": "0009_maintenance_mode",
+      "breakpoints": true
     }
   ]
 }

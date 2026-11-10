@@ -248,9 +248,8 @@ main article:hover { border-color: color-mix(in oklab, var(--primary) 35%, var(-
 .location-card svg { transition: transform 320ms ease; }
 .location-card:hover svg { transform: translateY(-4px) rotate(-12deg); }
 .thinking-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-.trust-logo { transition: opacity 250ms, color 250ms, transform 250ms; }
-.trust-track:hover .trust-logo { opacity: .4; }
-.trust-track:hover .trust-logo:hover { opacity: 1; color: var(--primary); transform: scale(1.06); }
+.trust-logo { transition: color 250ms, transform 250ms; }
+.trust-track:hover .trust-logo:hover { color: var(--primary); transform: scale(1.06); }
 .testimonial-enter { animation: hero-enter 400ms ease both; }
 @keyframes faq-open { from { height: 0; opacity: 0; } to { height: var(--radix-accordion-content-height); opacity: 1; } }
 @keyframes faq-close { from { height: var(--radix-accordion-content-height); opacity: 1; } to { height: 0; opacity: 0; } }

@@ -1,9 +1,10 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -15,6 +16,8 @@ import { SiteFooter, SiteHeader } from "../components/site";
 import { SITE_URL, organizationSchema } from "../lib/site-data";
 import { VisitorExperience } from "@/components/visitor-experience";
 import { supabase } from "@/integrations/supabase/client";
+import { maintenanceSettingsQuery } from "@/lib/maintenance";
+import { MaintenancePage } from "./maintenance";
 
 function NotFoundComponent() {
   return (
@@ -134,6 +137,38 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function RootLayout() {
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+  const isExcludedFromMaintenance =
+    currentPath.startsWith("/_authenticated") ||
+    currentPath.startsWith("/admin") ||
+    currentPath.startsWith("/auth") ||
+    currentPath.startsWith("/reset-password") ||
+    currentPath.startsWith("/maintenance");
+
+  const { data: maintenance } = useQuery(maintenanceSettingsQuery);
+
+  if (maintenance?.enabled && !isExcludedFromMaintenance) {
+    return (
+      <>
+        <MaintenancePage />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <Outlet />
+      </main>
+      <SiteFooter />
+      <VisitorExperience />
+    </>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
@@ -148,12 +183,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteHeader />
-      <main>
-        <Outlet />
-      </main>
-      <SiteFooter />
-      <VisitorExperience />
+      <RootLayout />
     </QueryClientProvider>
   );
 }
