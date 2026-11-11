@@ -90,6 +90,7 @@ export const organizationSchema = {
   "@id": `${SITE_URL}/#organization`,
   name: "Macrow Digital",
   url: SITE_URL,
+  logo: `${SITE_URL}/macrow-logo-512.png`,
   email: "growth@macrowdigital.com",
   description:
     "Global growth platform aligning digital marketing, marketing communication (marcomm) and technology as one system.",

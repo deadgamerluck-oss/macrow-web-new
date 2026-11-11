@@ -58,8 +58,13 @@ export function RichTextEditor({ id, label, value, onChange, placeholder }: {
     try {
       const stored = await uploadSiteImage(file);
       insertBlock(`![image](${stored})`);
-    } catch {
-      setError("Upload failed — please try again.");
+    } catch (err) {
+      console.error("image upload failed", err);
+      const message =
+        err && typeof err === "object" && "message" in err && typeof err.message === "string"
+          ? err.message
+          : "Upload failed — please try again.";
+      setError(message);
     } finally {
       setBusy(false);
       if (fileRef.current) fileRef.current.value = "";

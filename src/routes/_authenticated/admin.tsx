@@ -221,7 +221,7 @@ function Empty({ text }: { text: string }) {
   return <p className="text-muted-foreground">{text}</p>;
 }
 
-const cellClass = "px-4 py-3 align-top text-sm";
+const cellClass = "px-4 py-3 align-top text-sm [overflow-wrap:anywhere]";
 const headClass = "px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground";
 
 function Enquiries() {
@@ -245,7 +245,7 @@ function Enquiries() {
                 <td className={`${cellClass} whitespace-nowrap`}>{row.phone || "—"}</td>
                 <td className={`${cellClass} whitespace-nowrap`}>{row.budget || "—"}</td>
                 <td className={cellClass}>{row.source || "—"}</td>
-                <td className={`${cellClass} max-w-md whitespace-pre-line leading-6`}>{row.message}</td>
+                <td className={`${cellClass} max-w-md whitespace-pre-line break-words leading-6`}>{row.message}</td>
               </tr>
             ))}
           </tbody>
@@ -292,7 +292,7 @@ function Applications() {
                     <td className={`${cellClass} font-semibold`}>{row.full_name}</td>
                     <td className={cellClass}><a className="text-primary underline underline-offset-2" href={`mailto:${row.email}`}>{row.email}</a></td>
                     <td className={`${cellClass} whitespace-nowrap`}>{row.phone || "—"}</td>
-                    <td className={`${cellClass} max-w-sm whitespace-pre-line leading-6`}>{row.message || "—"}</td>
+                    <td className={`${cellClass} max-w-sm whitespace-pre-line break-words leading-6`}>{row.message || "—"}</td>
                     <td className={cellClass}>{row.resume_path ? <Button variant="outline" size="sm" onClick={() => { if (row.resume_path) void openResume(row.resume_path); }}>Download CV</Button> : "—"}</td>
                   </tr>
                 ))}
@@ -487,7 +487,7 @@ function Partners() {
                 <td className={`${cellClass} whitespace-nowrap`}>{row.phone || "—"}</td>
                 <td className={cellClass}>{row.website ? <a href={row.website} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{row.website}</a> : "—"}</td>
                 <td className={`${cellClass} whitespace-nowrap`}>{row.partnership_type || "—"}</td>
-                <td className={`${cellClass} max-w-md whitespace-pre-line leading-6`}>{row.message}</td>
+                <td className={`${cellClass} max-w-md whitespace-pre-line break-words leading-6`}>{row.message}</td>
               </tr>
             ))}
           </tbody>
