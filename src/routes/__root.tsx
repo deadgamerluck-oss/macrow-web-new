@@ -127,6 +127,18 @@ function RootShell({ children }: { children: ReactNode }) {
               "try{if(localStorage.getItem('macrow-theme')==='light'){document.documentElement.classList.add('light');document.documentElement.style.colorScheme='light'}}catch(e){}",
           }}
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KHS41518N4" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-KHS41518N4');
+            `,
+          }}
+        />
         <HeadContent />
       </head>
       <body>

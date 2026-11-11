@@ -1,11 +1,20 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
-/** Trust Cloudflare's client IP header only; never accept a client-supplied X-Forwarded-For chain. */
+/** Extract client IP from Cloudflare, reverse proxies (X-Forwarded-For, X-Real-IP), or fallback. */
 export function getTrustedClientIp(request?: Request): string | null {
-  const raw = request?.headers.get("cf-connecting-ip") ?? getRequestHeader("cf-connecting-ip");
-  const ip = raw?.trim();
-  if (!ip || ip.length > 64 || !/^(?:[\da-f:.]+)$/i.test(ip)) return null;
-  return ip;
+  const cf = request?.headers.get("cf-connecting-ip") ?? getRequestHeader("cf-connecting-ip");
+  if (cf && cf.trim() && /^(?:[\da-f:.]+)$/i.test(cf.trim())) return cf.trim();
+
+  const realIp = request?.headers.get("x-real-ip") ?? getRequestHeader("x-real-ip");
+  if (realIp && realIp.trim() && /^(?:[\da-f:.]+)$/i.test(realIp.trim())) return realIp.trim();
+
+  const forwarded = request?.headers.get("x-forwarded-for") ?? getRequestHeader("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first && /^(?:[\da-f:.]+)$/i.test(first)) return first;
+  }
+
+  return null;
 }
 
 /** Shared, database-backed hourly limit across server instances and deployments. */
