@@ -105,13 +105,13 @@ const team: ReadonlyArray<{
     linkedin: "",
     image: vandanaPhoto,
   },
-  // {
-  //   name: "Raj Chouhan",
-  //   role: "Frontend Developer",
-  //   email: "",
-  //   linkedin: "",
-  //   image: rajPhoto,
-  // },
+  {
+    name: "Raj Chouhan",
+    role: "Frontend Developer",
+    email: "",
+    linkedin: "",
+    image: rajPhoto,
+  },
 
   {
     name: "Prakash Arora",
