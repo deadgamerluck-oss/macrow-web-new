@@ -105,13 +105,13 @@ const team: ReadonlyArray<{
     linkedin: "",
     image: chitranshiPhoto,
   },
-  {
-    name: "Vandana Solanki",
-    role: "Content Creator",
-    email: "",
-    linkedin: "",
-    image: vandanaPhoto,
-  },
+  // {
+  //   name: "Vandana Solanki",
+  //   role: "Content Creator",
+  //   email: "",
+  //   linkedin: "",
+  //   image: vandanaPhoto,
+  // },
   {
     name: "Prakash Arora",
     role: "Intern",
