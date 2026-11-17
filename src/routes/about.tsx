@@ -92,6 +92,13 @@ const team: ReadonlyArray<{
     image: sangeetaPhoto,
   },
   {
+    name: "Raj Chouhan",
+    role: "Frontend Developer",
+    email: "",
+    linkedin: "",
+    image: rajPhoto,
+  },
+  {
     name: "Chitranshi Chouhan",
     role: "Content & Creative Associate",
     email: "",
@@ -105,14 +112,6 @@ const team: ReadonlyArray<{
     linkedin: "",
     image: vandanaPhoto,
   },
-  {
-    name: "Raj Chouhan",
-    role: "Frontend Developer",
-    email: "",
-    linkedin: "",
-    image: rajPhoto,
-  },
-
   {
     name: "Prakash Arora",
     role: "Intern",
