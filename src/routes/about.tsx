@@ -18,6 +18,7 @@ import chitranshiPhoto from "@/assets/team/chitranshi.jpg";
 import rajPhoto from "@/assets/team/raj.jpg";
 import prakashPhoto from "@/assets/team/prakash.jpg";
 import vandanaPhoto from "@/assets/team/vandana.jpg";
+import priyanshuPhoto from "@/assets/team/priyanshu.png";
 export const Route = createFileRoute("/about")({
   head: () =>
     metadata(
@@ -56,12 +57,35 @@ const team: ReadonlyArray<{
     linkedin: "https://www.linkedin.com/in/the-honey-sinha/",
     image: honeyPhoto,
   },
+
   {
     name: "Hitesh Goraiya",
     role: "Sales Head (Canada)",
     email: "",
     linkedin: "",
     image: hiteshPhoto,
+  },
+  {
+    name: "Gajendra Singh",
+    role: "Sales & Client Relations Lead",
+    email: "",
+    linkedin: "",
+    image: gajendraPhoto,
+  },
+  {
+    name: "Sangeeta Nagar",
+    role: "Business Development Executive",
+    email: "",
+    linkedin: "",
+    image: sangeetaPhoto,
+  },
+
+  {
+    name: "Raj Chouhan",
+    role: "Frontend Developer",
+    email: "",
+    linkedin: "",
+    image: rajPhoto,
   },
   {
     name: "Sumit Gohil",
@@ -78,40 +102,26 @@ const team: ReadonlyArray<{
     image: shilpaPhoto,
   },
   {
-    name: "Gajendra Singh",
-    role: "Sales & Client Relations Lead",
+    name: "Vandana Solanki",
+    role: "Content Creator",
     email: "",
     linkedin: "",
-    image: gajendraPhoto,
-  },
-  {
-    name: "Sangeeta Nagar",
-    role: "Business Development Executive",
-    email: "",
-    linkedin: "",
-    image: sangeetaPhoto,
-  },
-  {
-    name: "Raj Chouhan",
-    role: "Frontend Developer",
-    email: "",
-    linkedin: "",
-    image: rajPhoto,
+    image: vandanaPhoto,
   },
   {
     name: "Chitranshi Chouhan",
-    role: "Content & Creative Associate",
+    role: "Content Creator",
     email: "",
     linkedin: "",
     image: chitranshiPhoto,
   },
-  // {
-  //   name: "Vandana Solanki",
-  //   role: "Content Creator",
-  //   email: "",
-  //   linkedin: "",
-  //   image: vandanaPhoto,
-  // },
+  {
+    name: "Priyanshu ",
+    role: "Video Editor",
+    email: "",
+    linkedin: "",
+    image: chitranshiPhoto,
+  },
   {
     name: "Prakash Arora",
     role: "Intern",
