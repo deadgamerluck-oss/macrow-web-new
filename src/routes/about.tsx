@@ -17,7 +17,7 @@ import sangeetaPhoto from "@/assets/team/sangeeta.jpg";
 import chitranshiPhoto from "@/assets/team/chitranshi.jpg";
 import rajPhoto from "@/assets/team/raj.jpg";
 import prakashPhoto from "@/assets/team/prakash.jpg";
-import vandanaPhoto from "@/assets/team/vandana.jpg";
+import vandanaPhoto from "@/assets/team/vandana.png";
 import priyanshuPhoto from "@/assets/team/priyanshu.png";
 export const Route = createFileRoute("/about")({
   head: () =>
