@@ -116,7 +116,7 @@ const team: ReadonlyArray<{
     image: chitranshiPhoto,
   },
   {
-    name: "Priyanshu ",
+    name: "Priyanshu Kashyap",
     role: "Video Editor",
     email: "",
     linkedin: "",
