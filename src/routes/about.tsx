@@ -120,7 +120,7 @@ const team: ReadonlyArray<{
     role: "Video Editor",
     email: "",
     linkedin: "",
-    image: chitranshiPhoto,
+    image: priyanshuPhoto,
   },
   {
     name: "Prakash Arora",
