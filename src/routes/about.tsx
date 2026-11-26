@@ -6,7 +6,7 @@ import { metadata } from "@/lib/site-data";
 import { LogoSlider, TestimonialSlider } from "@/components/showcase";
 import teamPhoto from "@/assets/Home/About us 1.png";
 
-import lakshmanPhoto from "@/assets/team/lakshman.jpg";
+import lakshmanPhoto from "@/assets/team/LAKSHMAN1.jpg";
 import atulPhoto from "@/assets/team/atul.jpg";
 import honeyPhoto from "@/assets/team/Honey.jpg";
 import hiteshPhoto from "@/assets/team/hitesh.jpg";
